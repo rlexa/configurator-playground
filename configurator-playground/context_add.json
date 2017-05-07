@@ -1,0 +1,10 @@
+﻿{
+    "beans": [
+        {
+            "id": "testImportedId",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "scope": "singleton",
+            "properties": { "test": "imported" }
+        }
+    ]
+}

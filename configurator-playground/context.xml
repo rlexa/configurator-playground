@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<beans>
+
+  <import path="./context_add.xml" />
+  <import path="./NOTEXISTS.xml" optional="true" />
+
+  <bean id="fail_noparent" parent="nosuchparent" />
+  
+  <bean id="bool" class="bool" assign="true" />
+  <bean id="char" class="char" assign="q" />
+  <bean id="short" class="short" assign="123" />
+  <bean id="int" class="int" assign="123" />
+  <bean id="long" class="long" assign="123" />
+  <bean id="ushort" class="ushort" assign="123" />
+  <bean id="uint" class="uint" assign="123" />
+  <bean id="ulong" class="ulong" assign="123" />
+  <bean id="float" class="float" assign="1.23" />
+  <bean id="double" class="double" assign="1.23" />
+  <bean id="string" class="string" assign="imastring!" />
+
+  <bean id="int16" class="System.Int16" assign="123" />
+  <bean id="int32" class="System.Int32" assign="123" />
+  <bean id="int64" class="System.Int64" assign="123" />
+
+  <bean id="testStaticConstructor1" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground">
+    <factory name="GetInstance"/>
+    <property name="test" value="static"/>
+  </bean>
+  <bean id="testStaticConstructor2" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground">
+    <factory name="GetInstance">
+      <item value="static_param" />
+    </factory>
+  </bean>
+  <bean id="testConstructor" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground">
+    <factory>
+      <item value="constructed"/>
+    </factory>
+  </bean>
+  <bean id="testCopyConstructor" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground">
+    <factory>
+      <item value-ref="testConstructor"/>
+    </factory>
+  </bean>
+
+  <bean id="testInnerSingleton" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground" scope="singleton">
+    <property name="test" value="single"/>
+  </bean>
+  <bean id="testInnerPrototype" class="ConfiguratorTest.TestContext.TestContextInnerInherited, configurator-playground" scope="prototype">
+    <property name="test" value="proto"/>
+    <property name="inherited" value="works"/>
+  </bean>
+
+  <bean id="testParent" class="ConfiguratorTest.TestContext, configurator-playground" abstract="true">
+    <property name="fromparent" value="true"/>
+    <property name="fromparentoverwrite" value="parentvalue"/>
+    <property name="map_merge">
+      <map merge="true" class-key="int" class-value="string">
+        <item key="10" value="ten"/>
+        <item key="11" value="eleven"/>
+      </map>
+    </property>
+    <property name="list_merge">
+      <list merge="true" class-value="double">
+        <item value="11.1"/>
+        <item value="22.2"/>
+      </list>
+    </property>
+    <property name="set_merge">
+      <set merge="true" class-value="short">
+        <item value="1"/>
+        <item value="2"/>
+      </set>
+    </property>
+  </bean>
+
+  <bean id="test" parent="testParent">
+    <property name="string_public" value="test&apos;&apos;123"/>
+    <property name="privateint" value-ref="int"/>
+    <property name="FloatProperty" value="1.23"/>
+    <property name="nullable">
+      <null/>
+    </property>
+    <property name="fromparentoverwrite" value="childvalue"/>
+    <property name="reference_single0" value-ref="testInnerSingleton"/>
+    <property name="reference_single1" value-ref="testInnerSingleton"/>
+    <property name="reference_proto0" value-ref="testInnerPrototype"/>
+    <property name="reference_proto1" value-ref="testInnerPrototype"/>
+    <property name="nested">
+      <bean class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground">
+        <property name="test" value="nested"/>
+      </bean>
+    </property>
+    <property name="map">
+      <map class-key="int" class-value="string">
+        <item key="12" value="twelfe"/>
+        <item key="20" value="twenty"/>
+      </map>
+    </property>
+    <property name="map_merge">
+      <map merge="true" class-key="int" class-value="string">
+        <item key="12" value="twelfe"/>
+        <item key="20" value="twenty"/>
+      </map>
+    </property>
+    <property name="list">
+      <list class-value="double">
+        <item value="33.3"/>
+        <item value="44.4"/>
+      </list>
+    </property>
+    <property name="array">
+      <array class-value="long">
+        <item value="123"/>
+        <item value="234"/>
+      </array>
+    </property>
+    <property name="list_merge">
+      <list merge="true" class-value="double">
+        <item value="33.3"/>
+        <item value="44.4"/>
+      </list>
+    </property>
+    <property name="set">
+      <set class-value="short">
+        <item value="2"/>
+        <item value="3"/>
+      </set>
+    </property>
+    <property name="set_merge">
+      <set merge="true" class-value="short">
+        <item value="2"/>
+        <item value="3"/>
+      </set>
+    </property>
+    <property name="map_struct">
+      <map class-key="string" class-value="ConfiguratorTest.TestContext.TestContextInnerStruct, configurator-playground">
+        <item key="struct">
+          <bean class="ConfiguratorTest.TestContext.TestContextInnerStruct, configurator-playground">
+            <property name="foo" value="123" />
+          </bean>
+        </item>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="testOverride" class="ConfiguratorTest.TestContext.TestContextInner, configurator-playground" scope="singleton">
+    <property name="test" value="fail_no_override"/>
+  </bean>
+  <import path="./context_override.xml"/>
+
+</beans>

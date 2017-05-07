@@ -1,0 +1,168 @@
+﻿{
+    "beans": [
+        {
+            /* import: can be a string or an array of strings and/or objects */
+            "import": [
+                "./context_add.json",
+                {
+                    "path": "./NOTEXISTS.json",
+                    "optional": true
+                }
+            ]
+        },
+
+        { "id": "fail_noparent", "parent": "nosuchparent" },
+
+        { "id": "bool", "class": "bool", "assign": true },
+        { "id": "char", "class": "char", "assign": "q" },
+        { "id": "short", "class": "short", "assign": 123 },
+        { "id": "int", "class": "int", "assign": 123 },
+        { "id": "long", "class": "long", "assign": 123 },
+        { "id": "ushort", "class": "ushort", "assign": 123 },
+        { "id": "uint", "class": "uint", "assign": 123 },
+        { "id": "ulong", "class": "ulong", "assign": 123 },
+        { "id": "float", "class": "float", "assign": 1.23 },
+        { "id": "double", "class": "double", "assign": 1.23 },
+        { "id": "string", "class": "string", "assign": "imastring!" },
+
+        { "id": "int16", "class": "System.Int16", "assign": 123 },
+        { "id": "int32", "class": "System.Int32", "assign": 123 },
+        { "id": "int64", "class": "System.Int64", "assign": 123 },
+
+        {
+            "id": "testStaticConstructor1",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "factory": { "static": "GetInstance" },
+            "properties": { "test": "static" }
+        },
+        {
+            "id": "testStaticConstructor2",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "factory": { "static": "GetInstance", "params": [ "static_param" ] }
+        },
+        {
+            "id": "testConstructor",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "factory": { "params": [ "constructed" ] }
+        },
+        {
+            "id": "testCopyConstructor",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "factory": { "params": [ { "value-ref": "testConstructor" } ] }
+        },
+        {
+            "id": "testInnerSingleton",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "scope": "singleton",
+            "properties": { "test": "single" }
+        },
+        {
+            "id": "testInnerPrototype",
+            "class": "ConfiguratorTest.TestContext.TestContextInnerInherited, configurator-playground",
+            "scope": "prototype",
+            "properties": { "test": "proto", "inherited": "works" }
+        },
+        {
+            "id": "testParent",
+            "class": "ConfiguratorTest.TestContext, configurator-playground",
+            "abstract": true,
+            "properties": {
+                "fromparent": true,
+                "fromparentoverwrite": "parentvalue",
+                "map_merge": {
+                    "merge": true,
+                    "value-class-key": "int",
+                    "value-class-value": "string",
+                    "value-map": { "10": "ten", "11": "eleven" }
+                },
+                "list_merge": {
+                    "merge": true,
+                    "value-class-value": "double",
+                    "value-list": [ 11.1, 22.2 ]
+                },
+                "set_merge": {
+                    "merge": true,
+                    "value-class-value": "short",
+                    "value-list": [ 1, 2 ]
+                }
+            }
+        },
+        {
+            "id": "test",
+            "parent": "testParent",
+            "properties": {
+                "string_public": "test''123",
+                "privateint": { "value-ref": "int" },
+                "FloatProperty": 1.23,
+                "nullable": null,
+                "fromparentoverwrite": "childvalue",
+                "reference_single0": { "value-ref": "testInnerSingleton" },
+                "reference_single1": { "value-ref": "testInnerSingleton" },
+                "reference_proto0": { "value-ref": "testInnerPrototype" },
+                "reference_proto1": { "value-ref": "testInnerPrototype" },
+                "nested": {
+                    "value-bean": {
+                        "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+                        "properties": { "test": "nested" }
+                    }
+                },
+                "map": {
+                    "value-class-key": "int",
+                    "value-class-value": "string",
+                    "value-map": { "12": "twelfe", "20": "twenty" }
+                },
+                "map_merge": {
+                    "merge": true,
+                    "value-class-key": "int",
+                    "value-class-value": "string",
+                    "value-map": { "12": "twelfe", "20": "twenty" }
+                },
+                "array": {
+                    "value-class-value": "long",
+                    "value-array": [ 123, 234 ]
+                },
+                "list": {
+                    "value-class-value": "double",
+                    "value-list": [ 33.3, 44.4 ]
+                },
+                "list_merge": {
+                    "merge": true,
+                    "value-class-value": "double",
+                    "value-list": [ 33.3, 44.4 ]
+                },
+                "set": {
+                    "value-class-value": "short",
+                    "value-set": [ 2, 3 ]
+                },
+                "set_merge": {
+                    "merge": true,
+                    "value-class-value": "short",
+                    "value-set": [ 2, 3 ]
+                },
+                "map_struct": {
+                    "value-class-key": "string",
+                    "value-class-value": "ConfiguratorTest.TestContext.TestContextInnerStruct, configurator-playground",
+                    "value-map": {
+                        "struct": {
+                            "value-bean": {
+                                "class": "ConfiguratorTest.TestContext.TestContextInnerStruct, configurator-playground",
+                                "properties": { "foo": 123 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        /* testing override */
+        {
+            "id": "testOverride",
+            "class": "ConfiguratorTest.TestContext.TestContextInner, configurator-playground",
+            "scope": "singleton",
+            "properties": { "test": "fail_no_override" }
+        },
+        {
+            "import": "./context_override.json"
+        }
+    ]
+}

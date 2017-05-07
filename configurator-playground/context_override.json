@@ -1,0 +1,8 @@
+{
+    "beans": [
+        {
+            "id_merge": "testOverride",
+            "properties": { "test": "success_override" }
+        }
+    ]
+}
